@@ -4,34 +4,34 @@ date: 2025-02-22
 layout: post
 ---
 
-Weíve all been fed the gospel of throughput in digital design: string some subsystems together, slap on basic flow control, and the slowest bitrate dictates. Itís the bottleneck dogmaósimple, intuitive, and trustworthy. If Subsystem A churns at 10 Gbps, B at 5 Gbps, and C at 8 Gbps, youíre capped at 5 Gbps. End of story. Yawn.
+We‚Äôve all been fed the gospel of throughput in digital design: string some subsystems together, slap on basic flow control, and the slowest bitrate dictates. It‚Äôs the bottleneck dogma‚Äîsimple, intuitive, and trustworthy. If Subsystem A churns at 10 Gbps, B at 5 Gbps, and C at 8 Gbps, you‚Äôre capped at 5 Gbps. End of story. Yawn.
 
-But what if the subsystems arenít so polite? What if one has to finish its entire jobócompletely drain its buffer, wave goodbye, and take a smoke breakóbefore the next one even blinks? Thatís where the architects trip over their own flip-flops, and Iím here to whisper an unverified truth: *effective throughput in this case isnít the slowest linkóitís actually calculated like total resistance of resistors in parallel.*
+But what if the subsystems aren‚Äôt so polite? What if one has to finish its entire job‚Äîcompletely drain its buffer, wave goodbye, and take a smoke break‚Äîbefore the next one even blinks? That‚Äôs where the architects trip over their own flip-flops, and I‚Äôm here to whisper an unverified truth: *effective throughput in this case isn‚Äôt the slowest link‚Äîit‚Äôs actually calculated like total resistance of resistors in parallel.*
 
 ## The Slowest-Link Myth
 
-Picture the standard setup: Subsystem A hands off data to B, B to C, all with lightweight flow control (a ìready-validî handshake, if youíre feeling Verilog-y). No one waits for a full packet; data trickles through as soon as itís ready. The throughput? Min(A, B, C). Itís the weakest-link philosophyódesigners nod sagely, optimize the laggard, and call it a day. Fair enough. Itís true when the systemís a leaky pipe: the narrowest section sets the flow.
+Picture the standard setup: Subsystem A hands off data to B, B to C, all with lightweight flow control (a ‚Äúready-valid‚Äù handshake, if you‚Äôre feeling Verilog-y). No one waits for a full packet; data trickles through as soon as it‚Äôs ready. The throughput? Min(A, B, C). It‚Äôs the weakest-link philosophy‚Äîdesigners nod sagely, optimize the laggard, and call it a day. Fair enough. It‚Äôs true when the system‚Äôs a leaky pipe: the narrowest section sets the flow.
 
-But now imagine a different beast. Subsystem A processes a chunk of data at 10 Gbps but hoards it until the full blockís doneósay, 100 bits, taking 10 nsóbefore dumping it to B. B, at 5 Gbps, needs 20 ns to chew through that 100 bits and pass it to C, who at 8 Gbps takes 12.5 ns. Each subsystem insists on finishing its task entirely before the next one starts. This isnít a pipeline anymore; itís a relay race where everyoneís waiting for the baton. Think of a situation of needing to authenticate a block before starting the decryption.
+But now imagine a different beast. Subsystem A processes a chunk of data at 10 Gbps but hoards it until the full block‚Äôs done‚Äîsay, 100 bits, taking 10 ns‚Äîbefore dumping it to B. B, at 5 Gbps, needs 20 ns to chew through that 100 bits and pass it to C, who at 8 Gbps takes 12.5 ns. Each subsystem insists on finishing its task entirely before the next one starts. This isn‚Äôt a pipeline anymore; it‚Äôs a relay race where everyone‚Äôs waiting for the baton. Think of a situation of needing to authenticate a block before starting the decryption.
 
 ## The Parallel Resistor Revelation
 
-Hereís the kicker: the effective throughput isnít 5 Gbps (the slowest bitrate). Itís worseóand weirder. To figure it out, think time, not rate. Each subsystemís ìcycleî time for that 100-bit block is:  
+Here‚Äôs the kicker: the effective throughput isn‚Äôt 5 Gbps (the slowest bitrate). It‚Äôs worse‚Äîand weirder. To figure it out, think time, not rate. Each subsystem‚Äôs ‚Äúcycle‚Äù time for that 100-bit block is:  
 - A: 10 ns (100 bits / 10 Gbps)  
 - B: 20 ns (100 bits / 5 Gbps)  
 - C: 12.5 ns (100 bits / 8 Gbps)  
 
-Total time for one block to slog through the system? 10 + 20 + 12.5 = 42.5 ns. Effective throughput = bits per time = 100 bits / 42.5 ns ò 2.35 Gbps. Huh. Thatís not 5 Gbps. Thatís not even close.
+Total time for one block to slog through the system? 10 + 20 + 12.5 = 42.5 ns. Effective throughput = bits per time = 100 bits / 42.5 ns Àú 2.35 Gbps. Huh. That‚Äôs not 5 Gbps. That‚Äôs not even close.
 
 Now, flip it: throughput is bits per second, so effective throughput (Teff) is 1 / (sum of times per bit). For each subsystem, time per bit is 1/bitrate:  
 - A: 1 / 10 Gbps = 0.1 ns/bit  
 - B: 1 / 5 Gbps = 0.2 ns/bit  
 - C: 1 / 8 Gbps = 0.125 ns/bit  
 
-Total time per bit = 0.1 + 0.2 + 0.125 = 0.425 ns/bit. Teff = 1 / 0.425 ns/bit ò 2.35 Gbps. Look familiar? Itís the harmonic mean of the bitratesóor, if you squint, itís bandwidth behaving like conductance, the inverse of resistance. Thatís right: *subsystems in series with full-block handoffs calculate like resistors in parallel.*
+Total time per bit = 0.1 + 0.2 + 0.125 = 0.425 ns/bit. Teff = 1 / 0.425 ns/bit Àú 2.35 Gbps. Look familiar? It‚Äôs the harmonic mean of the bitrates‚Äîor, if you squint, it‚Äôs bandwidth behaving like conductance, the inverse of resistance. That‚Äôs right: *subsystems in series with full-block handoffs calculate like effective resistance of resistors in parallel.*
 
-## Why This Matters (and Why Itís Funny)
+## Why This Matters (and Why It‚Äôs Funny)
 
-Philosophically, itís an insult to linearity. We assume systems stack neatlyóadd times, pick minimumsóbut here, reciprocity sneaks in. Resistors in parallel? In my RTL? Itís absurdity meets elegance, and it forces us to question: are we designing pipelines, or are we just playing relay with bad handoffs?
+Philosophically, it‚Äôs an insult to linearity. We assume systems stack neatly‚Äîadd times, pick minimums‚Äîbut here, reciprocity sneaks in. Resistors in parallel? In my RTL? It‚Äôs absurdity meets elegance, and it forces us to question: are we designing pipelines, or are we just playing relay with bad handoffs?
 
-Next time youíre verifying a chain of subsystems, ask: is my throughput a min() function, or am I secretly summing inverses? The answer might just fry your FPGAó
+Next time you‚Äôre verifying a chain of subsystems, ask: is my throughput a min() function, or am I secretly summing inverses? The answer might just fry your FPGA‚Äî
