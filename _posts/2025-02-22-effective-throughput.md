@@ -4,9 +4,9 @@ date: 2025-02-22
 layout: post
 ---
 
-We’ve all been fed the gospel of throughput in digital design: string some subsystems together, slap on basic flow control, and the slowest bitrate dictates. It’s the bottleneck dogma—simple, intuitive, and trustworthy. If Subsystem A churns at 10 Gbps, B at 5 Gbps, and C at 8 Gbps, you’re capped at 5 Gbps. End of story. Yawn.
+We’ve all been fed the gospel of throughput in digital design: string some subsystems together, slap on basic flow control, and the slowest bitrate limits the system. It’s the bottleneck dogma—simple, intuitive, and trustworthy. If Subsystem A churns at 10 Gbps, B at 5 Gbps, and C at 8 Gbps, you’re capped at 5 Gbps. End of story. Yawn.
 
-But what if the subsystems aren’t so polite? What if one has to finish its entire job—completely drain its buffer, wave goodbye, and take a smoke break—before the next one even blinks? That’s where the architects trip over their own flip-flops, and I’m here to whisper an unverified truth: *effective throughput in this case isn’t the slowest link—it’s actually calculated like total resistance of resistors in parallel.*
+But what if the subsystems aren’t cant operate in parallel? What if one has to finish its entire job—completely drain its buffer, wave goodbye—before the next one even begins? That’s where the architects trip over their own flip-flops, and I’m here to whisper an unverified truth: *effective throughput in this case isn’t the slowest link—it’s actually calculated with the inverse sum rule, like total resistance of resistors in parallel.*
 
 ## The Slowest-Link Myth
 
@@ -32,6 +32,6 @@ Total time per bit = 0.1 + 0.2 + 0.125 = 0.425 ns/bit. Teff = 1 / 0.425 ns/bit �
 
 ## Why This Matters (and Why It’s Funny)
 
-Philosophically, it’s an insult to linearity. We assume systems stack neatly—add times, pick minimums—but here, reciprocity sneaks in. Resistors in parallel? In my RTL? It’s absurdity meets elegance, and it forces us to question: are we designing pipelines, or are we just playing relay with bad handoffs?
+Philosophically, it’s an insult to linearity. We assume systems stack neatly—add times, pick minimums—but here, reciprocity sneaks in. Resistors in parallel? In my RTL? It’s absurdity meets elegance.
 
 Next time you’re verifying a chain of subsystems, ask: is my throughput a min() function, or am I secretly summing inverses? The answer might just fry your FPGA—
