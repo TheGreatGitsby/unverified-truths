@@ -4,9 +4,6 @@ date: 2025-03-16
 layout: post
 ---
 
-
-# Agile vs. Waterfall: MVP vs. Blueprint—and Why Big Systems Contracts Should Rethink the Plan
-
 Software development splits into two lanes: Agile and Waterfall. You’d think the debate between them was ancient history—Agile’s iterative groove versus Waterfall’s rigid march—yet it’s still kicking, especially in chip and hardware design. Waterfall keeps popping up in large government systems contracts and safety-critical work like DO-254 projects, where every bolt’s life-or-death. But it doesn’t have to be this way—there’s a case for Agile even there. Agile’s about starting with a minimum viable product (MVP), seeing how it runs, and iterating until it’s dialed in. Waterfall’s the grand strategist—plan it all upfront, then build it in one hefty go. Agile’s a tinkerer, stitching it together as it learns. Waterfall’s the architect with a pristine blueprint, betting every detail’s spot-on from day one. Problem is, that’s tough to pull off. Most projects—think semiconductor designs, or sprawling systems contracts—would shine with Agile, not for mushy reasons, but because waiting to connect the dots at the end is how you get a very expensive oops.
 
 ## Agile: MVP and Iteration, Skip the Fuss
