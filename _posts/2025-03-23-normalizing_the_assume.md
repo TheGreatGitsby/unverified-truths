@@ -1,4 +1,8 @@
-# Normalizing the "Assume" Constraint: Elevating Requirements-Based Process Flows
+---
+title: "Normalizing the Assume Constraint: Elevating Requirements-Based Process Flows"
+date: 2025-03-23
+layout: post
+---
 
 In formal verification, we’ve mastered a distinction that keeps complex designs manageable: *assume* statements and *assert* statements. When verifying a design under test (DUT), we write "assume" statements to constrain the input space say, "Assume the AXI slave receives write address signals per the AXI4 protocol" and "assert" statements to verify the DUT’s behavior, like "Assert the slave responds with a valid write acknowledgment." This split is elegant and effective: assumptions define the environment, assertions check the DUT’s actions. It’s a model of clarity, testability, and precision.
 
